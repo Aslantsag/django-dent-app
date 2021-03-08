@@ -1,0 +1,59 @@
+{% extends 'dashboard/base.html' %}
+
+{% block content %}
+<!-- Page Heading -->
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Прайс-лист</h1>
+    <a href="#addMedia" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm dropdown-toggle" role="button" data-toggle="collapse" aria-expanded="false" aria-controls="addMedia">
+        <i class="fas fa-plus-circle fa-sm text-white-50"></i> Добавить
+    </a>
+</div>
+<div id="addMedia" class="collapse mb-4">
+    <form class="w-100" method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            {{ form.title }}
+        </div>
+        <div class="mb-3">
+            {{ form.price }}
+        </div>
+        <button name="submit" class="btn btn-primary">Добавить</button>
+    </form>
+</div>
+<!-- Content Row -->
+{% if price_list %}
+<table class="table text-dark">
+    <thead>
+        <tr class="table-info">
+            <th width="50">№</th>
+            <th>Описание услуги</th>
+            <th width="200">Цена</th>
+            <th width="160">Управление</th>
+        </tr>
+        {% for item in price_list %}
+        <tr>
+            <td>{{ item.id }}</td>
+            <td>{{ item.title|truncatechars:80 }}</td>
+            <td>{{ item.price }}руб.</td>
+            <td align="center">
+                <div class="price-btnbox">
+                    <form method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="pk" value="{{ item.id }}">
+                        <button name="edit" class="btn btn-info btn-circle">
+                            <i class="far fa-edit"></i>
+                        </button>
+                        <button name="delete" class="btn btn-danger btn-circle">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </form>
+                </div>
+            </td>
+        </tr>
+        {% endfor %}
+    </thead>
+</table>
+{% else %}
+<div class="code-404">{{ code404 }}</div>
+{% endif %}
+{% endblock %}

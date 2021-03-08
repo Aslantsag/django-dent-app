@@ -1,0 +1,32 @@
+{% extends 'dashboard/base.html' %}
+
+{% block content %}
+<!-- Page Heading -->
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Запись / Изменить</h1>
+</div>
+<div id="addMedia" class="mb-4">
+    <form class="w-100" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="pk" value="{{ pk }}">
+        <div class="row">
+            <div class="form-group col-lg-6">
+                {{ form.name }}
+            </div>
+            <div class="form-group col-lg-6">
+                {{ form.phone }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-lg-6">
+                {{ form.line_date }}
+            </div>
+            <div class="form-group col-lg-6">
+                {{ form.line_time }}
+            </div>
+        </div>
+        <button name="save" class="btn btn-primary">Сохранить</button>
+    </form>
+</div>
+<!-- Content Row -->
+{% endblock %}

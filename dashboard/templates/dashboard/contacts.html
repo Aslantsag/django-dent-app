@@ -1,0 +1,92 @@
+{% extends 'dashboard/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Контакты / Добавить</h1>
+    {% if user_info %}
+    <form method="post">
+        {% csrf_token %}
+        <button name="edit" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+            <i class="far fa-edit fa-sm text-white-50"></i> Редактировать
+        </button>
+    </form>
+    {% endif %}
+</div>
+{% if user_info %}
+<div class="row">
+    <div class="col-lg-4">
+        <div class="mb-4">
+            {% if user.userinfo.user_image %}
+            <img class="rounded-circle shadow-lg" src="{{ user.userinfo.user_image.url }}"  width="240px" height="240" alt="{{ user.username }}">
+            {% else %}
+            <img class="rounded-circle shadow-lg" src="/static/dashboard/img/undraw_profile.svg"  width="240px" height="240" alt="{{ user.username }}">
+            {% endif %}
+        </div>
+    </div>
+    <div class="col-lg-8">
+        <ul class="border list-group list-group-flush user-info-list">
+            <li class="list-group-item">
+                <i class="fa fa-phone"></i>
+                {% if user_info.phone %}
+                <a href="tel:{{ user_info.phone }}" class="text-info">{{ user_info.phone }}</a>
+                {% else %}
+                <span class="no_data">{{ no_data }}</span>
+                {% endif %}
+            </li>
+            <li class="list-group-item">
+                <i class="fab fa-whatsapp"></i>
+                {% if user_info.whats %}
+                <a href="https://api.whatsapp.com/send?phone={{ user_info.whats }}" class="text-info" target="_blank">{{ user_info.whats }}</a>
+                {% else %}
+                <span class="no_data">{{ no_data }}</span>
+                {% endif %}
+            </li>
+            <li class="list-group-item">
+                <i class="fab fa-instagram"></i>
+                {% if user_info.insta %}
+                <a href="{{ user_info.insta }}" class="text-info" target="_blank">{{ user_info.insta }}</a>
+                {% else %}
+                <span class="no_data">{{ no_data }}</span>
+                {% endif %}
+            </li>
+            <li class="list-group-item">
+                <i class="fas fa-map-marker-alt"></i>
+                {% if user_info.address %}
+                <span class="text-info">{{ user_info.address }}</span>
+                {% else %}
+                <span class="no_data">{{ no_data }}</span>
+                {% endif %}
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="mapbox">
+    {% if user_info.geo %}
+    <iframe class="map_frame mt-4" src="{{ user_info.geo }}" width="100%" height="320" frameborder="0"></iframe>
+    {% else %}
+    <div class="mapbox-empty">{{ no_data_map }}</div>
+    {% endif %}
+</div>
+<hr>
+{% if user_info.about_text %}
+<div class="row">
+    <div class="col-lg-12 my-2">
+        <h2 class="h4 text-center mb-4">Немного обо мне</h2>
+        <div class="about_text">
+            {{ user_info.about_text }}
+        </div>
+    </div>
+</div>
+{% endif %}
+{% else %}
+<div id="addMedia" class="mb-4">
+    <form class="w-100" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="mb-3">
+            {{ form|crispy }}
+        </div>
+        <button name="submit" class="btn btn-primary">Сохранить</button>
+    </form>
+</div>
+{% endif %}
+{% endblock %}

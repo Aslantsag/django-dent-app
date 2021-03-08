@@ -1,0 +1,29 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+    {{ title }}
+{% endblock %}
+
+{% block content %}
+{% if price_list %}
+    <h1 class="h2 text-center m-4">{{ title }}</h1>
+    <table class="table">
+        <thead>
+            <tr class="table-info">
+                <th width="50">№</th>
+                <th>Описание услуги</th>
+                <th width="200">Цена</th>
+            </tr>
+            {% for row in price_list %}
+            <tr>
+                <td>{{ row.num }}</td>
+                <td>{{ row.title }}</td>
+                <td>{{ row.price }}руб.</td>
+            </tr>
+            {% endfor %}
+        </thead>
+    </table>
+{% else %}
+<div class="h2 text-center m-4">Тут пока пусто!</div>
+{% endif %}
+{% endblock %}

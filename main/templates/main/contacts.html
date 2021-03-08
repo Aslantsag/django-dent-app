@@ -1,0 +1,52 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+    {{ title }}
+{% endblock %}
+
+{% block content %}
+{% if user_info %}
+    <div class="shadow-lg p-4">
+        <h1 class="h3 text-center mb-5">{{ title }}</h1>
+        <div class="row">
+            <div class="col-lg-5">
+                <div class="text-center">
+                    <img class="rounded-circle shadow-lg" src="{{ user_info.user_image.url }}" alt="{{ title }}" width="250px">
+                </div>
+            </div>
+            <div class="col-lg-7">
+                <ul class="list-group user-info-list">
+                    <li class="list-group-item">
+                        <i class="fa fa-phone" aria-hidden="true"></i>
+                        <a href="tel:{{ user_info.phone }}" class="text-info">{{ user_info.phone }}</a>
+                    </li>
+                    <li class="list-group-item">
+                        <i class="fa fa-whatsapp" aria-hidden="true"></i>
+                        <a href="https://api.whatsapp.com/send?phone={{ user_info.whats }}" class="text-info" target="_blank">{{ user_info.whats }}</a>
+                    </li>
+                    <li class="list-group-item">
+                        <i class="fa fa-instagram" aria-hidden="true"></i>
+                        <a href="{{ user_info.insta }}" class="text-info" target="_blank">{{ user_info.insta }}</a>
+                    </li>
+                    <li class="list-group-item">
+                        <i class="fa fa-map-marker" aria-hidden="true"></i>
+                        <span class="text-info">{{ user_info.address }}</span>
+                    </li>
+                </ul>
+            </div>
+            <iframe class="map_frame mt-4" src="{{ user_info.geo }}" width="100%" height="320" frameborder="0"></iframe>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-lg-12 my-2">
+                <h2 class="h3 text-center mb-4">Немного обо мне</h2>
+                <div class="about_text">
+                    {{ user_info.about_text }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% else %}
+<div class="h2 text-center m-4">Тут пока пусто!</div>
+{% endif %}
+{% endblock %}

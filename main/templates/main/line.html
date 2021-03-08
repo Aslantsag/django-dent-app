@@ -1,0 +1,80 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+    {{ title }}
+{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+<div class="h4 mb-4 text-info">
+    <i class="fa fa-user-circle-o" aria-hidden="true"></i>
+    {{ username.capitalize }}
+</div>
+{% endif %}
+{% if form %}
+<div class="formbox my-4">
+    <form method="post" action="{% url 'add-line' %}">
+        <div class="row">
+            <div class="form-group col-lg-6">
+                {% csrf_token %}
+                {{ form.name }}
+            </div>
+            <div class="form-group col-lg-6">
+                {{ form.phone }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-lg-6">
+                {{ form.line_date }}
+            </div>
+            <div class="form-group col-lg-6">
+                {{ form.line_time }}
+            </div>
+        </div>
+        <button class="btn btn-lg btn-success">Добавить</button>
+    </form>
+</div>
+{% endif %}
+{% if line  %}
+<h3 class="text-center mt-4 mb-3">Запись</h3>
+<div class="block py-3">
+    {% for l in line %}
+    <div class="d-flex justify-content-between align-items-center user-post alert alert-info" role="alert">
+        <div class="line-info">
+            <div class="post-name h5 mb-1">{{ l.name}} {{ l.phone }}</div>
+            <div class="post-date post-item">
+                <span class="post-time__span">
+                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                </span>
+                <span class="post-time__date">{{ l.line_date }}</span>
+            </div>
+            <div class="post-time post-item">
+                <span class="post-time__span">
+                    <i class="fa fa-clock-o" aria-hidden="true"></i>
+                </span>
+                <time class="post-time__time">{{ l.line_time|slice:"5" }}</time>
+            </div>
+        </div>
+        {% if user.is_authenticated and user.id == user_id %}
+        <div class="line-btnbox d-flex">
+            <a href="tel:{{ l.phone }}" class="mr-2 btn btn-success">
+                <i class="fa fa-phone" aria-hidden="true"></i>
+            </a>
+            <a href="/line/{{ l.id }}/update/" class="mr-2 btn btn-primary">
+                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+            </a>
+            <form action="/line/{{ l.id }}/delete/" method="post">
+                {% csrf_token %}
+                <button class="btn btn-danger">
+                    <i class="fa fa-times-circle" aria-hidden="true"></i>
+                </button>
+            </form>
+        </div>
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="alert alert-danger">Записей пока нет</div>
+{% endif %}
+{% endblock %}

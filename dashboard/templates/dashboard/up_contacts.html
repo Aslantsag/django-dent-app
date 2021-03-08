@@ -1,0 +1,18 @@
+{% extends 'dashboard/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<!-- Page Heading -->
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Контакты / Изменить</h1>
+</div>
+<div id="addMedia" class="mb-4">
+    <form class="w-100" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="mb-3">
+            {{ form|crispy }}
+        </div>
+        <button name="save" class="btn btn-primary">Сохранить</button>
+    </form>
+</div>
+<!-- Content Row -->
+{% endblock %}

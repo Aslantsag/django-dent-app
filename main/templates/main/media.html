@@ -1,0 +1,22 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+    {{ title }}
+{% endblock %}
+
+{% block content %}
+{% if portfolio %}
+    <div class="shadow-lg content p-4">
+        <h1 class="h3 text-center mb-5">{{ title }}</h1>
+        <div class="text-center">
+            {% for item in portfolio %}
+            <div class="d-inline-block file-item">
+                <img src="{{ item.file.url }}" alt="{{ item.title }}" width="100%">
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+{% else %}
+<div class="h2 text-center m-4">Тут пока пусто!</div>
+{% endif %}
+{% endblock %}

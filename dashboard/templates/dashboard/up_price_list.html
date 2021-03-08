@@ -1,0 +1,22 @@
+{% extends 'dashboard/base.html' %}
+
+{% block content %}
+<!-- Page Heading -->
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Прайс-лист / Изменить</h1>
+</div>
+<div id="addMedia" class="mb-4">
+    <form class="w-100" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="hidden" name="pk" value="{{ pk }}">
+        <div class="mb-3">
+            {{ form.title }}
+        </div>
+        <div class="mb-3">
+            {{ form.price }}
+        </div>
+        <button name="save" class="btn btn-primary">Сохранить</button>
+    </form>
+</div>
+<!-- Content Row -->
+{% endblock %}
