@@ -32,6 +32,10 @@ INSTALLED_APPS = [
     'dashboard',
 ]
 
+ABSOLUTE_URL_OVERRIDES = {
+    'auth.user': lambda u: "/line/%s/" % u.pk,
+}
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

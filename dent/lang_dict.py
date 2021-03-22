@@ -1,5 +1,10 @@
 lang_dict = {
     'site_title': 'Запись к стоматологу',
+    'home_page_title': 'Специалисты',
+    'line_page_title': 'Очередь',
+    'price_page_title': 'Прайс-Лист',
+    'media_page_title': 'Портфолио',
+    'contact_page_title': 'Контакты',
     'sign_up_success': 'Вы успешно зарегистрировались, теперь можете войти в свой аккаунт',
     'invalid_err': 'Ошибка валидации!',
     'common_title': 'Введите название',

@@ -60,10 +60,10 @@
             <a href="tel:{{ l.phone }}" class="mr-2 btn btn-success">
                 <i class="fa fa-phone" aria-hidden="true"></i>
             </a>
-            <a href="/line/{{ l.id }}/update/" class="mr-2 btn btn-primary">
+            <a href="{{ l.get_update_url }}" class="mr-2 btn btn-primary">
                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
             </a>
-            <form action="/line/{{ l.id }}/delete/" method="post">
+            <form action="{{ l.get_delete_url }}" method="post">
                 {% csrf_token %}
                 <button class="btn btn-danger">
                     <i class="fa fa-times-circle" aria-hidden="true"></i>

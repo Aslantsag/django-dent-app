@@ -1,5 +1,7 @@
-from django.contrib.auth.models import User
 from django.db import models
+from django.urls import reverse
+from django.contrib.auth.models import User
+
 
 class Line(models.Model):
     STATUS_CHOICES = [
@@ -16,3 +18,13 @@ class Line(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse('line', kwargs={'pk': self.pk})
+
+    def get_update_url(self):
+        return reverse('line-update', kwargs={'pk': self.pk})
+
+    def get_delete_url(self):
+        return reverse('line-delete', kwargs={'pk': self.pk})
+

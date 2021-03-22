@@ -2,6 +2,10 @@ body {
     font-family: Nunito, calibri, sans-serif !important;
     counter-reset: list;
 }
+body.registration {
+    background-size: cover;
+    background-image: url('/static/image/reg_bg.jpeg');
+}
 .alert.user-post {
     background-color: #f0fdff;
     /*height: 78px;*/
@@ -69,6 +73,9 @@ body {
     margin: 2px;
     width: 30%;
     cursor: pointer;
+}
+.list-group-item i {
+    color: #333;
 }
 @media (max-width: 600px) {
     .authbox.w-50 {
