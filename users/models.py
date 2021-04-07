@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.urls import reverse
 
 
 class UserPrice(models.Model):
@@ -14,6 +15,15 @@ class UserPrice(models.Model):
 
     def __str__(self):
         return self.title
+
+    def get_absolute_url(self):
+        return reverse('price_list', kwargs={'pk': self.pk})
+
+    def get_update_url(self):
+        return reverse('price-update', kwargs={'pk': self.pk})
+
+    def get_delete_url(self):
+        return reverse('price-delete', kwargs={'pk': self.pk})
 
 
 class UserInfo(models.Model):

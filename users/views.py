@@ -8,10 +8,12 @@ from django.views.generic import ListView, DeleteView, CreateView, UpdateView
 from dent.lang_dict import lang_dict as l
 from main.forms import NewLine, RegisterForm
 from main.models import Line
+from mixin.permissions import UserIsOwnerMixin
 
 
 def back_url(request):
-    return f'/line/{request.user.id}'
+    # return f'/line/{request.user.id}'
+    return request.META.get('HTTP_REFERER', '/')
 
 
 class AddLine(LoginRequiredMixin, CreateView):
@@ -29,10 +31,11 @@ class AddLine(LoginRequiredMixin, CreateView):
         return redirect(back_url(request))
 
 
-class UpdateLine(UpdateView):
+class UpdateLine(UserIsOwnerMixin, UpdateView):
     model = Line
     form_class = NewLine
-    template_name = "users/line_update.html"
+    # template_name = "users/line_update.html"
+    template_name = "dashboard/up_line.html"
 
     def post(self, request, pk):
         line = Line.objects.get(pk=pk)
@@ -45,9 +48,8 @@ class UpdateLine(UpdateView):
         return redirect(back_url(request))
 
 
-class DeleteLine(DeleteView):
+class DeleteLine(UserIsOwnerMixin, DeleteView):
     model = Line
-    context_object_name = 'line'
 
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -68,22 +70,5 @@ class SignUpView(SuccessMessageMixin, CreateView):
             return redirect('/')
         return super(SignUpView, self).get(request, *args, **kwargs)
 
-
-# def sign_up(request):
-#     if request.user.is_authenticated:
-#         return redirect('/')
-#     if request.method == 'POST':
-#         form = RegisterForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             messages.success(request, l['sign_up_success'])
-#             return redirect('login')
-#     else:
-#         form = RegisterForm()
-#
-#     data = {
-#         'form': form
-#     }
-#     return render(request, "registration/sign_up.html", data)
 
 

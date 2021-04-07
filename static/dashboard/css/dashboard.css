@@ -51,6 +51,9 @@
 .user-info-list li i {
     margin-right: 10px;
 }
+.price-btnbox form {
+    display: inline-block;
+}
 @keyframes alert_hide {
     to {
         opacity: 0;

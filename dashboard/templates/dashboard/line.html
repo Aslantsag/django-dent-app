@@ -9,7 +9,7 @@
     </a>
 </div>
 <div id="addMedia" class="collapse mb-4">
-    <form class="w-100" method="post">
+    <form action="{% url 'add-line' %}" class="w-100" method="post">
         {% csrf_token %}
         <div class="row">
             <div class="form-group col-lg-6">
@@ -49,12 +49,11 @@
             <td>{{ item.line_time }}</td>
             <td align="center">
                 <div class="price-btnbox">
-                    <form method="post">
+                    <a href="{{ item.get_update_url }}" name="edit" class="btn btn-info btn-circle">
+                        <i class="far fa-edit"></i>
+                    </a>
+                    <form action="{{ item.get_delete_url }}" method="post">
                         {% csrf_token %}
-                        <input type="hidden" name="pk" value="{{ item.id }}">
-                        <button name="edit" class="btn btn-info btn-circle">
-                            <i class="far fa-edit"></i>
-                        </button>
                         <button name="delete" class="btn btn-danger btn-circle">
                             <i class="fas fa-trash"></i>
                         </button>

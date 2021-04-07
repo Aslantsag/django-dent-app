@@ -1,107 +1,91 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
+from django.urls import reverse_lazy
+from django.views.generic import DetailView, CreateView, ListView, DeleteView, UpdateView
+from django.views.generic.base import View, TemplateView
 
 from dashboard.forms import MediaForm, PriceForm, InfoForm
 from dent.lang_dict import lang_dict as l
 from main.forms import NewLine
 from main.models import Line
+from mixin.permissions import UserIsOwnerMixin
 from users.models import UserInfo, UserMedia, UserPrice
 
-@login_required
-def index(request):
-    return render(request, "dashboard/index.html")
 
-@login_required
-def line(request):
-    if request.method == 'POST':
-        if 'submit' in request.POST:
-            form = NewLine(request.POST)
-            if form.is_valid():
-                item = form.save(commit=False)
-                item.user_id = request.user.id
-                item.save()
-                messages.success(request, l['success_created'])
-        else:
-            pk = request.POST['pk']
-            item = Line.objects.get(pk=pk)
-            if item.user == request.user:
-                if 'edit' in request.POST:
-                    form = NewLine(instance=item)
+class HomeView(LoginRequiredMixin, TemplateView):
+    template_name = "dashboard/index.html"
 
-                    data = {
-                        'pk': pk,
-                        'form': form
-                    }
-                    return render(request, "dashboard/up_line.html", data)
 
-                if 'save' in request.POST:
-                    form = NewLine(request.POST, request.FILES, instance=item)
-                    if form.is_valid():
-                        form.save()
-                        messages.success(request, l['success_updated'])
+class LineListView(ListView):
 
-                if 'delete' in request.POST:
-                    item.delete()
-                    messages.success(request, l['success_deleted'])
-            else:
-                messages.error(request, l['permission_denied'])
-        return redirect('line')
-    else:
-        form = NewLine()
-        item = Line.objects.filter(user=request.user)
+    template_name = 'dashboard/line.html'
+    context_object_name = 'line'
 
-        data = {
-            'form': form,
-            'line': item
-        }
-        return render(request, "dashboard/line.html", data)
+    def get_queryset(self):
+        return Line.objects.filter(user=self.request.user, status='public')
 
-@login_required
-def price_list(request):
-    if request.method == 'POST':
-        if 'submit' in request.POST:
-            form = PriceForm(request.POST)
-            if form.is_valid():
-                item = form.save(commit=False)
-                item.user_id = request.user.id
-                item.save()
-                messages.success(request, l['success_created'])
-        else:
-            pk = request.POST['pk']
-            item = UserPrice.objects.get(pk=pk)
-            if item.user == request.user:
-                if 'edit' in request.POST:
-                    form = PriceForm(instance=item)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = NewLine()
+        return context
 
-                    data = {
-                        'pk': pk,
-                        'form': form
-                    }
-                    return render(request, "dashboard/up_price_list.html", data)
 
-                if 'save' in request.POST:
-                    form = PriceForm(request.POST, request.FILES, instance=item)
-                    if form.is_valid():
-                        form.save()
-                        messages.success(request, l['success_updated'])
+class PriceListView(ListView):
 
-                if 'delete' in request.POST:
-                    item.delete()
-                    messages.success(request, l['success_deleted'])
-            else:
-                messages.error(request, l['permission_denied'])
+    template_name = 'dashboard/price_list.html'
+    context_object_name = 'price_list'
+
+    def get_queryset(self):
+        return UserPrice.objects.filter(user=self.request.user, status='public')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = PriceForm()
+        return context
+
+
+class CreatePrice(LoginRequiredMixin, CreateView):
+
+    def post(self, request):
+        form = PriceForm(request.POST)
+        if form.is_valid():
+            item = form.save(commit=False)
+            item.user_id = request.user.id
+            item.save()
+            messages.success(request, l['success_created'])
         return redirect('price_list')
-    else:
-        form = PriceForm()
-        item = UserPrice.objects.filter(user=request.user)
 
-        data = {
-            'form': form,
-            'price_list': item
-        }
-        return render(request, "dashboard/price_list.html", data)
+
+class UpdatePrice(UserIsOwnerMixin, UpdateView):
+
+    model = UserPrice
+    form_class = PriceForm
+    template_name = "dashboard/up_price_list.html"
+
+    def post(self, request, pk):
+        line = UserPrice.objects.get(pk=pk)
+        form = PriceForm(request.POST, instance=line)
+        if form.is_valid():
+            form.save()
+            messages.success(request, l['line_updated'])
+        else:
+            messages.error(request, l['invalid_err'])
+        return redirect('price_list')
+
+
+class DeletePrice(UserIsOwnerMixin, DeleteView):
+
+    model = UserPrice
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.delete()
+        messages.success(request, l['success_deleted'])
+        return redirect('price_list')
+
 
 @login_required
 def media(request):
@@ -147,6 +131,7 @@ def media(request):
             'portfolio': item
         }
         return render(request, "dashboard/media.html", data)
+
 
 @login_required
 def contacts(request):

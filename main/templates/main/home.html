@@ -11,9 +11,9 @@
     <a href="{{ user.get_absolute_url }}" class="d-flex justify-content-between align-items-center text-decoration-none shadow-lg p-3 mt-3 bg-white rounded">
         <div class="line-left">
             {% if user.userinfo.user_image %}
-            <img class="rounded mr-2" src="{{ user.userinfo.user_image.url }}" width="60" alt="{{ user.username }}">
+            <img class="rounded mr-2" src="{{ user.userinfo.user_image.url }}" width="60" height="60" alt="{{ user.username }}">
             {% else %}
-            <img class="rounded mr-2" src="{% static 'image/doctor.jpg' %}" width="60" alt="{{ user.username }}">
+            <img class="rounded mr-2" src="{% static 'image/doctor.jpg' %}" width="60" height="60" alt="{{ user.username }}">
             {% endif %}
             <span class="h5">{{ user.username }}</span>
         </div>
