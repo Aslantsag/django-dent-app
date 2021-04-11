@@ -1,2 +1,2 @@
-# Django application for online appointment with med clinic
+# Django application for online appointment with clinic
 
