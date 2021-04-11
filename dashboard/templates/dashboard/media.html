@@ -10,7 +10,7 @@
     </a>
 </div>
 <div id="addMedia" class="collapse mb-4">
-    <form class="w-100" method="post" enctype="multipart/form-data">
+    <form action="{% url 'add-media' %}" class="w-100" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="mb-3">
             {{ form.file }}
@@ -28,12 +28,11 @@
     <div class="col-xl-6 mb-4">
         <div class="card media-card border-left-primary shadow py-2" style="background-image: url({{ item.file.url }});">
             <div class="card-btnbox">
-                <form method="post">
+                <a href="{{ item.get_update_url }}" class="btn btn-info btn-circle">
+                    <i class="far fa-edit"></i>
+                </a>
+                <form action="{{ item.get_delete_url }}" method="post">
                     {% csrf_token %}
-                    <input type="hidden" name="pk" value="{{ item.id }}">
-                    <button name="edit" class="btn btn-info btn-circle">
-                        <i class="far fa-edit"></i>
-                    </button>
                     <button name="delete" class="btn btn-danger btn-circle">
                         <i class="fas fa-trash"></i>
                     </button>

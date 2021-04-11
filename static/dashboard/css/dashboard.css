@@ -51,7 +51,7 @@
 .user-info-list li i {
     margin-right: 10px;
 }
-.price-btnbox form {
+[class$='btnbox'] form {
     display: inline-block;
 }
 @keyframes alert_hide {

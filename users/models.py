@@ -57,6 +57,15 @@ class UserMedia(models.Model):
     def __str__(self):
         return self.title
 
+    def get_absolute_url(self):
+        return reverse('media', kwargs={'pk': self.pk})
+
+    def get_update_url(self):
+        return reverse('media-update', kwargs={'pk': self.pk})
+
+    def get_delete_url(self):
+        return reverse('media-delete', kwargs={'pk': self.pk})
+
     class Meta:
         verbose_name = 'File'
         verbose_name_plural = 'User media'
